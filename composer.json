@@ -1,0 +1,14 @@
+{
+    "name": "websecret/eloquent-eventsourceable",
+    "description": "EventSourceable trait for Eloquent",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nick Tolkachev",
+            "email": "n7olkachev@gmail.com"
+        }
+    ],
+    "require": {
+        "illuminate/support": "^5.2"
+    }
+}
