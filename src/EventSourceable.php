@@ -1,5 +1,7 @@
 <?php
 
+namespace Websecret\EventSourceable;
+
 trait EventSourceable
 {
     /**

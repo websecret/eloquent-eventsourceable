@@ -1,5 +1,7 @@
 <?php
 
+namespace Websecret\EventSourceable;
+
 use Illuminate\Support\ServiceProvider;
 
 class EventSourceableServiceProvider extends ServiceProvider
