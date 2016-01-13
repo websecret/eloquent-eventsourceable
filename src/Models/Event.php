@@ -11,6 +11,7 @@ class Event extends Model
     use SoftDeletes;
 
     protected $fillable = ['diff'];
+    protected $casts = ['diff' => 'array'];
 
     public function eventSourceable()
     {
