@@ -2,17 +2,35 @@
 
 namespace Websecret\EventSourceable;
 
+use Websecret\EventSourceable\Models\Event;
+
 trait EventSourceable
 {
     /**
-     * Saves diff between model's states into DB
+     * Save diff between model states into DB
      */
     public function saveDiff()
     {
-        $oldState = $this->fresh()->getAttributes();
+        $oldState = $this->exists
+            ? $this->fresh()->getAttributes()
+            : [];
         $newState = $this->getAttributes();
 
         $diff = array_diff_assoc($oldState, $newState);
-        dd($diff);
+        $this->events()->create([
+            'type'   => Event::TYPE_UPDATE,
+            'diff'   => $diff
+        ]);
+    }
+
+    public function rebuild()
+    {
+        $newModel = new static;
+        $events = $this->events;
+        foreach ($events as $event) {
+            $newModel->fill($events->diff);
+        }
+        $this->fill($newModel->getAttributes());
+        $this->save();
     }
 }
