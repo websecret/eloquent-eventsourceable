@@ -6,14 +6,21 @@ use Websecret\EventSourceable\Models\Event;
 
 trait EventSourceable
 {
+    private $oldState = null;
     /**
      * Save diff between model states into DB
      */
-    public function saveDiff()
+    public function onSaving()
     {
         $oldState = $this->exists
             ? $this->fresh()->getAttributes()
             : [];
+        $this->oldState = $oldState;
+    }
+
+    public function onSaved()
+    {
+        $oldState = $this->oldState;
         $newState = $this->getAttributes();
 
         $diff = array_diff_assoc($oldState, $newState);
