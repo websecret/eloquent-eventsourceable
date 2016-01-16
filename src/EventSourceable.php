@@ -23,7 +23,7 @@ trait EventSourceable
         $oldState = $this->oldState;
         $newState = $this->getAttributes();
 
-        $diff = array_diff_assoc($oldState, $newState);
+        $diff = array_diff_assoc($newState, $oldState);
         $this->events()->create([
             'diff'   => $diff,
             'type'   => $this->eventType,
