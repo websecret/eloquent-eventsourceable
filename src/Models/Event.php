@@ -18,6 +18,6 @@ class Event extends Model
 
     public function eventSourceable()
     {
-        return $this->morphTo();
+        return $this->morphTo('event_sourceable');
     }
 }
