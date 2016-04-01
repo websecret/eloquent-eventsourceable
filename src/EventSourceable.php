@@ -4,11 +4,13 @@ namespace Websecret\EventSourceable;
 
 trait EventSourceable
 {
-    public function onSaved()
+    public function saveDiff()
     {
+        $eventType = $this->wasRecentlyCreated ? : 'create' : 'update';
+        
         $this->events()->create([
             'diff'   => $this->getDirty(),
-            'type'   => $this->eventType,
+            'type'   => $eventType,
         ]);
     }
 
