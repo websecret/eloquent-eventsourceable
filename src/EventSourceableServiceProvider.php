@@ -15,7 +15,7 @@ class EventSourceableServiceProvider extends ServiceProvider
     {
         $this->app['events']->listen('eloquent.saved*', function ($model) {
             if ($model instanceof EventSourceableInterface) {
-                $model->onSaved();
+                $model->saveDiff();
             }
         });
     }
