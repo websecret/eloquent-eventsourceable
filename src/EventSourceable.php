@@ -4,28 +4,10 @@ namespace Websecret\EventSourceable;
 
 trait EventSourceable
 {
-    private $oldState  = null;
-    private $eventType = null;
-
-    public function onSaving()
-    {
-        $this->eventType = $this->exists
-            ? 'update'
-            : 'create';
-
-        $this->oldState = $this->exists
-            ? $this->fresh()->getAttributes()
-            : [];
-    }
-
     public function onSaved()
     {
-        $oldState = $this->oldState;
-        $newState = $this->getAttributes();
-
-        $diff = array_diff_assoc($newState, $oldState);
         $this->events()->create([
-            'diff'   => $diff,
+            'diff'   => $this->getDirty(),
             'type'   => $this->eventType,
         ]);
     }
