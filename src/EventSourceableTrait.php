@@ -2,6 +2,8 @@
 
 namespace Websecret\EventSourceable;
 
+use Auth;
+
 trait EventSourceableTrait
 {
 
