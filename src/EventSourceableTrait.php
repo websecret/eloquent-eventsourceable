@@ -14,10 +14,11 @@ trait EventSourceableTrait
     public function saveDiff()
     {
         $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
-        
+        $userId = Auth::user() ? Auth::user()->id : null;
         $this->events()->create([
             'diff' => $this->getDirty(),
             'type' => $eventType,
+            'user_id' => $userId,
         ]);
     }
 

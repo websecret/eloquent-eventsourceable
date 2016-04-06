@@ -13,6 +13,7 @@ class Event extends Model
     protected $fillable = [
         'diff',
         'type',
+        'user_id',
     ];
     protected $casts = ['diff' => 'array'];
 
