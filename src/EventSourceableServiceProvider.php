@@ -6,6 +6,11 @@ use Illuminate\Support\ServiceProvider;
 
 class EventSourceableServiceProvider extends ServiceProvider
 {
+    public function boot()
+    {
+        $this->handleConfigs();
+    }
+
     public function register()
     {
         $this->registerEvents();
@@ -18,5 +23,12 @@ class EventSourceableServiceProvider extends ServiceProvider
                 $model->saveDiff();
             }
         });
+    }
+
+    private function handleConfigs()
+    {
+        $configPath = __DIR__ . '/../config/eventsourceable.php';
+        $this->publishes([$configPath => config_path('eventsourceable.php')], 'config');
+        $this->mergeConfigFrom($configPath, 'eventsourceable');
     }
 }

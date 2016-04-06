@@ -2,15 +2,22 @@
 
 namespace Websecret\EventSourceable;
 
-trait EventSourceable
+trait EventSourceableTrait
 {
+
+    public function events()
+    {
+        $class = config('eventsourceable.model');
+        return $this->morphMany($class, 'event_sourceable');
+    }
+
     public function saveDiff()
     {
-        $eventType = $this->wasRecentlyCreated ? : 'create' : 'update';
+        $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
         
         $this->events()->create([
-            'diff'   => $this->getDirty(),
-            'type'   => $eventType,
+            'diff' => $this->getDirty(),
+            'type' => $eventType,
         ]);
     }
 
