@@ -18,11 +18,13 @@ trait EventSourceableTrait
         $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
         $userId = Auth::user() ? Auth::user()->id : null;
         $dirty = array_except($this->getDirty(), $this->getDates());
-        $this->events()->create([
-            'diff' => $dirty,
-            'type' => $eventType,
-            'user_id' => $userId,
-        ]);
+        if(count($dirty)) {
+            $this->events()->create([
+                'diff' => $dirty,
+                'type' => $eventType,
+                'user_id' => $userId,
+            ]);
+        }
     }
 
     public function rebuild()
