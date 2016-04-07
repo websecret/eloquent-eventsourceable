@@ -21,6 +21,10 @@ trait EventSourceableTrait
         return true;
     }
 
+    protected function ignorePrimaryKey() {
+        return true;
+    }
+
     public function saveDiff()
     {
         $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
@@ -28,6 +32,9 @@ trait EventSourceableTrait
         $ignore = $this->ignore();
         if($this->ignoreDates()) {
             $ignore = array_merge($ignore, $this->getDates());
+        }
+        if($this->ignorePrimaryKey()) {
+            $ignore[] = $this->primaryKey;
         }
         $dirty = array_except($this->getDirty(), $ignore);
         if(count($dirty)) {
