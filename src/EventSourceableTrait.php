@@ -7,21 +7,26 @@ use Auth;
 trait EventSourceableTrait
 {
 
-    protected $eventsourceableIngore = [];
-    protected $eventsourceableIngoreDates = true;
-
     public function events()
     {
         $class = config('eventsourceable.model');
         return $this->morphMany($class, 'event_sourceable');
     }
 
+    protected function ignore() {
+        return [];
+    }
+
+    protected function ignoreDates() {
+        return true;
+    }
+
     public function saveDiff()
     {
         $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
         $userId = Auth::user() ? Auth::user()->id : null;
-        $ignore = $this->eventsourceableIngore;
-        if($this->eventsourceableIngoreDates) {
+        $ignore = $this->ignore();
+        if($this->ignoreDates()) {
             $ignore = array_merge($ignore, $this->getDates());
         }
         $dirty = array_except($this->getDirty(), $ignore);
