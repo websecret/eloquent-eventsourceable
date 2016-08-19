@@ -17,6 +17,7 @@ class Event extends Model
         'type',
         'user_id',
     ];
+    
     protected $casts = ['diff' => 'array'];
 
     public function eventSourceable()

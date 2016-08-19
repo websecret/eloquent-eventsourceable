@@ -29,13 +29,7 @@ trait EventSourceableTrait
     {
         $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
         $userId = Auth::user() ? Auth::user()->id : null;
-        $ignore = $this->ignore();
-        if($this->ignoreDates()) {
-            $ignore = array_merge($ignore, $this->getDates());
-        }
-        if($this->ignorePrimaryKey()) {
-            $ignore[] = $this->primaryKey;
-        }
+        $ignore = $this->getIgnore();
         $dirty = array_except($this->getDirty(), $ignore);
         if(count($dirty)) {
             $this->events()->create([
@@ -55,5 +49,17 @@ trait EventSourceableTrait
         }
         $this->fill($newModel->getAttributes());
         $this->save();
+    }
+
+    public function getIgnore()
+    {
+        $ignore = $this->ignore();
+        if ($this->ignoreDates()) {
+            $ignore = array_merge($ignore, $this->getDates());
+        }
+        if ($this->ignorePrimaryKey()) {
+            $ignore[] = $this->primaryKey;
+        }
+        return $ignore;
     }
 }
