@@ -23,6 +23,12 @@ class EventSourceableServiceProvider extends ServiceProvider
                 $model->saveDiff();
             }
         });
+
+        $this->app['events']->listen('eloquent.deleted*', function ($model) {
+            if ($model instanceof EventSourceableInterface) {
+                $model->saveDiff();
+            }
+        });
     }
 
     private function handleConfigs()

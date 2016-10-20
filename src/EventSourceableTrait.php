@@ -7,6 +7,11 @@ use Auth;
 trait EventSourceableTrait
 {
 
+    public static $eventTypeCreate = 'create';
+    public static $eventTypeUpdate = 'update';
+    public static $eventTypeDelete = 'delete';
+
+
     public function events()
     {
         $class = config('eventsourceable.model');
@@ -27,10 +32,19 @@ trait EventSourceableTrait
 
     public function saveDiff()
     {
-        $eventType = $this->wasRecentlyCreated ? 'create' : 'update';
+        if($this->exists) {
+            $eventType = $this->wasRecentlyCreated ? self::$eventTypeCreate : self::$eventTypeUpdate;
+        } else {
+            $eventType = self::$eventTypeDelete;
+        }
         $userId = Auth::user() ? Auth::user()->id : null;
         $ignore = $this->getIgnore();
-        $dirty = array_except($this->getDirty(), $ignore);
+        if($eventType == self::$eventTypeDelete) {
+            $dirty = $this->getAttributes();
+        } else {
+            $dirty = $this->getDirty();
+            $dirty = array_except($dirty, $ignore);
+        }
         if(count($dirty)) {
             $this->events()->create([
                 'diff' => $dirty,
@@ -42,12 +56,10 @@ trait EventSourceableTrait
 
     public function rebuild()
     {
-        $newModel = new static;
-        $events = $this->events;
+        $events = $this->events()->orderBy('created_at')->get();
         foreach ($events as $event) {
-            $newModel->fill($event->diff);
+            $this->forceFill($event->diff);
         }
-        $this->fill($newModel->getAttributes());
         $this->save();
     }
 
