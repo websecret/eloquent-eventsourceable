@@ -42,7 +42,7 @@ trait EventSourceableTrait
             $relation = $this->{$relationName}();
             $relationClass = $relation->getModel();
             $relationForeignKey = last(explode('.', $relation->getForeignKey()));
-            $relationEventsIds = $class::where('event_sourceable_type', '=', str_replace("\\", "\\\\", get_class($relationClass)))->whereRaw('`diff`->"$.' . $relationForeignKey . '" = ' . $key)->pluck('id')->toArray();
+            $relationEventsIds = $class::where('event_sourceable_type', '=', get_class($relationClass))->whereRaw('`diff`->"$.' . $relationForeignKey . '" = ' . $key)->pluck('id')->toArray();
             $eventsIds = array_merge($eventsIds, $relationEventsIds);
         }
         return array_unique($eventsIds);
