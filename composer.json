@@ -16,5 +16,12 @@
         "psr-4": {
             "Websecret\\EventSourceable\\": "src/"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Websecret\\EventSourceable\\EventSourceableServiceProvider"
+            ]
+        }
     }
 }
