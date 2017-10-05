@@ -18,13 +18,13 @@ class EventSourceableServiceProvider extends ServiceProvider
 
     private function registerEvents()
     {
-        $this->app['events']->listen('eloquent.saved*', function ($model) {
+        $this->app['events']->listen('eloquent.saved*', function ($event, $model) {
             if ($model instanceof EventSourceableInterface) {
                 $model->saveDiff();
             }
         });
 
-        $this->app['events']->listen('eloquent.deleted*', function ($model) {
+        $this->app['events']->listen('eloquent.deleted*', function ($event, $model) {
             if ($model instanceof EventSourceableInterface) {
                 $model->saveDiff();
             }
