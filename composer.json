@@ -9,8 +9,8 @@
         }
     ],
     "require": {
-        "illuminate/support": "5.*",
-        "illuminate/database": "5.*"
+        "illuminate/support": "^6.0",
+        "illuminate/database": "^6.0"
     },
     "autoload": {
         "psr-4": {
